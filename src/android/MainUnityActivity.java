@@ -22,8 +22,6 @@ public class  MainUnityActivity extends OverrideUnityActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mainUnityInstance = this;
-        //TODO: add later the below line based on arguments from Cordova
-        //addUIToUnityWindow();
         if(getIntent().hasExtra("messageJson")){
             try {
                 JSONObject messageArgs = new JSONObject(getIntent().getStringExtra("messageJson"));
@@ -56,30 +54,6 @@ public class  MainUnityActivity extends OverrideUnityActivity{
             if(mUnityPlayer != null) {
                 finish();
             }
-    }
-
-    void addUIToUnityWindow(){
-        FrameLayout frameLayout = mUnityPlayer;
-        {
-            Button closeButton = new Button(this);
-            closeButton.setText("CLOSE");
-            closeButton.setX(10);
-            closeButton.setY(20);
-
-            closeButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if(returnMessage!=null){
-                        Intent intent = new Intent();
-                        intent.putExtra("CORDOVA_MSG",returnMessage);
-                        setResult(Activity.RESULT_OK,intent);
-                    }
-                    finish();
-                }
-            });
-            frameLayout.addView(closeButton,300,200);
-        }
-
     }
 
     void sendMessage(JSONObject messageArgs) {

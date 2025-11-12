@@ -23,7 +23,8 @@
 //  Created by ___ALAN JOSE___ on ___17/03/2021___.
 //  Copyright ___ALAN JOSE___ ___2021___. All rights reserved.
 //
-
+#include <mach-o/dyld.h>
+#include <mach-o/loader.h>
 #import "AppDelegate.h"
 #import "MainViewController.h"
 
@@ -45,8 +46,8 @@ UnityFramework* UnityFrameworkLoad()
     UnityFramework* ufw = [bundle.principalClass getInstance];
     if (![ufw appController])
     {
-        // unity is not initialized
-        [ufw setExecuteHeader: &_mh_execute_header];
+        const struct mach_header_64* machineHeader = (const struct mach_header_64*)_dyld_get_image_header(0);
+        [ufw setExecuteHeader: machineHeader];
     }
     return ufw;
 }
@@ -68,8 +69,28 @@ UnityFramework* UnityFrameworkLoad()
 
 - (void)quitunityPlayer:(NSString*)feedbackMsg
 {
-    [UnityFrameworkLoad() unloadApplication];
     cordovaMsg = feedbackMsg;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        UnityFramework* ufw = UnityFrameworkLoad();
+        if (ufw) {
+            [[NSNotificationCenter defaultCenter] addObserver:self
+                selector:@selector(unityDidUnload:)
+                name:@"UnityDidUnload"
+                object:nil];
+            [ufw unloadApplication];
+        }
+
+    });
+}
+
+- (void)showHostMainWindow
+{
+    `name:@"UnityDidUnload"
+    `object:**nil**];
+    `[ufw unloadApplication];
+    }
+
+    });
 }
 
 - (void)showHostMainWindow
