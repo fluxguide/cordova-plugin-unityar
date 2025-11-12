@@ -85,16 +85,6 @@ UnityFramework* UnityFrameworkLoad()
 
 - (void)showHostMainWindow
 {
-    `name:@"UnityDidUnload"
-    `object:**nil**];
-    `[ufw unloadApplication];
-    }
-
-    });
-}
-
-- (void)showHostMainWindow
-{
     [self showHostMainWindow:@""];
 }
 
